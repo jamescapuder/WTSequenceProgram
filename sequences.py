@@ -1,3 +1,4 @@
+import itertools
 
 """
 Script to generate alternating sequences of specified length, and perform switches.
@@ -38,11 +39,35 @@ def gen_sequence(l, cur_seq, next_gt):
     else:
         return cur_seq
 
+
+def gen_patterns(n):
+    l = '()*'
+    combos = list(itertools.combinations_with_replacement(l, n))
+    print(combos)
+    bad = ['((','))', '(*', '*)']
+    temp = []
+    for i in combos:
+        print(i)
+        if not any(b in ''.join(i) for b in bad):
+            temp.append(i)
+    print(temp)
+            
+            
+        
+    # z = [x for x in combos if '((' not in ''.join(x)]
+    # y = [x for x in z if '))' not in ''.join(x)]
+    # v = [x for x in y if '*)' not in ''.join(x)]
+    # u = [x for x in v if '(*' not in ''.join(x)]
+    # front = [x for x in u if x[0]!=')']
+    # back = [x for x in front if x[-1]!='(']
+
+
+
 says = eval(input("enter an n: "))
 results = {}
-for i in range(1,says):
+for i in range(1, says):
     zed = flatten(gen_sequence(list(range(1, says+1)), [i], True))
-    results[str(i)] = [x for x in zed if len(x)==says]
+    results[str(i)] = [x for x in zed if len(x) == says]
     print("\n %d \n" % i)    
     print(results[str(i)])
-    
+gen_patterns(says)
