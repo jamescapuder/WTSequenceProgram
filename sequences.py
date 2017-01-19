@@ -95,7 +95,8 @@ print("number of alternating sequences %d \n" % len(total_list))
 print("number of swap patterns: %d \n" % len(pats))
 
 performed = perform_swaps(total_list, pats)
-pattern_dict = {}
-for i in pats:
-    pattern_dict[i] = [x for x in performed if x[1] == i]
-    print("%s: %s copies\n\t%s" % (i, str(len(pattern_dict[i])),'\n\t'.join([x[0] for x in pattern_dict[i]])))
+for i, j in performed.items():
+    print(i)
+    for s in j:
+        print("\t%s" % ''.join([str(x) for x in s]))
+
