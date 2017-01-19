@@ -1,5 +1,6 @@
 import itertools
-
+import csv
+import pandas as pd
 """
 Script to generate alternating sequences of specified length, and perform switches.
 """
@@ -52,7 +53,7 @@ def gen_patterns(n):
             if i[0] != ')' and i[-1]!='(':
                 temp.append(list(i))
     # final = [''.join(x) for x in temp]
-    return final
+    return temp
 
 def pattern_seq(seq, pat):
     # ret = ''
@@ -95,8 +96,7 @@ print("number of alternating sequences %d \n" % len(total_list))
 print("number of swap patterns: %d \n" % len(pats))
 
 performed = perform_swaps(total_list, pats)
-for i, j in performed.items():
-    print(i)
-    for s in j:
-        print("\t%s" % ''.join([str(x) for x in s]))
+outfile = 'output_n_%s.csv' % str(n)
+df = pd.DataFrame(performed)
+df.to_csv(outfile)
 
