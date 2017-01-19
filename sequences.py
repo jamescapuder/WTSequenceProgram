@@ -42,15 +42,18 @@ def gen_sequence(l, cur_seq, next_gt):
 
 def gen_patterns(n):
     l = '()*'
-    combos = list(itertools.combinations_with_replacement(l, n))
-    print(combos)
+    combos = list(itertools.product([')', '(','*'], repeat=n))
+    # print(combos)
     bad = ['((','))', '(*', '*)']
     temp = []
     for i in combos:
-        print(i)
+        # print(i)
         if not any(b in ''.join(i) for b in bad):
-            temp.append(i)
-    print(temp)
+            if i[0] != ')' and i[-1]!='(':
+                temp.append(i)
+    final = [''.join(x) for x in temp]
+    return final
+    #print(final)
             
             
         
@@ -62,12 +65,51 @@ def gen_patterns(n):
     # back = [x for x in front if x[-1]!='(']
 
 
+def pattern_seq(seq, pat):
+    # ret = ''
+    p = list(pat)
+    s = list(seq)
+    for i in range(len(p)):
+        if pat[i] == '(':
+            # temp[i] = s[i+1]
+            # temp[i+1] = s[i]
+            s[i], s[i+1] = s[i+1], s[i]
+    return ''.join(''.join([str(x) for x in s]))
+            
+    
+def perform_swaps(seqs, pats):
+    final = []
+    s = [''.join([str(x) for x in y]) for y in seqs]
+    for c in s:  # each sequence
+        # print("\n sequence: %s" % c)
+        for p in pats:
+            # print("\n pattern: %s" % p)
+            swapped = pattern_seq(c, p)
+            # print("\n swapped: %s" % swapped)
+            if swapped in s:
+                final.append((c, p, swapped))
+    return final
 
+    
+    
 says = eval(input("enter an n: "))
 results = {}
+total_list = []
 for i in range(1, says):
     zed = flatten(gen_sequence(list(range(1, says+1)), [i], True))
     results[str(i)] = [x for x in zed if len(x) == says]
-    print("\n %d \n" % i)    
+    print("\n Alternating sequences starting with %d \n" % i)    
     print(results[str(i)])
-gen_patterns(says)
+    print("\n")
+    total_list.extend(results[str(i)])
+pats = gen_patterns(says)
+
+
+print("number of alternating sequences %d \n" % len(total_list))
+print("number of swap patterns: %d \n" % len(pats))
+
+performed = perform_swaps(total_list, pats)
+pattern_dict = {}
+for i in pats:
+    pattern_dict[i] = [x for x in performed if x[1] == i]
+    print("%s: %s copies\n\t%s" % (i, str(len(pattern_dict[i])),'\n\t'.join([x[0] for x in pattern_dict[i]])))
