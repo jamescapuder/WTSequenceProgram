@@ -96,7 +96,7 @@ print("number of alternating sequences %d \n" % len(total_list))
 print("number of swap patterns: %d \n" % len(pats))
 
 performed = perform_swaps(total_list, pats)
-outfile = 'output_n_%s.csv' % str(n)
+outfile = 'output_n_%s.csv' % str(says)
 df = pd.DataFrame(performed)
 df.to_csv(outfile)
 
