@@ -50,45 +50,31 @@ def gen_patterns(n):
         # print(i)
         if not any(b in ''.join(i) for b in bad):
             if i[0] != ')' and i[-1]!='(':
-                temp.append(i)
-    final = [''.join(x) for x in temp]
+                temp.append(list(i))
+    # final = [''.join(x) for x in temp]
     return final
-    #print(final)
-            
-            
-        
-    # z = [x for x in combos if '((' not in ''.join(x)]
-    # y = [x for x in z if '))' not in ''.join(x)]
-    # v = [x for x in y if '*)' not in ''.join(x)]
-    # u = [x for x in v if '(*' not in ''.join(x)]
-    # front = [x for x in u if x[0]!=')']
-    # back = [x for x in front if x[-1]!='(']
-
 
 def pattern_seq(seq, pat):
     # ret = ''
-    p = list(pat)
-    s = list(seq)
-    for i in range(len(p)):
+    # p = list(pat)
+    # s = list(seq)
+    for i in range(len(pat)):
         if pat[i] == '(':
             # temp[i] = s[i+1]
             # temp[i+1] = s[i]
-            s[i], s[i+1] = s[i+1], s[i]
-    return ''.join(''.join([str(x) for x in s]))
+            seq[i], seq[i+1] = seq[i+1], seq[i]
+    return seq
             
     
 def perform_swaps(seqs, pats):
     final = []
-    s = [''.join([str(x) for x in y]) for y in seqs]
-    for c in s:  # each sequence
-        # print("\n sequence: %s" % c)
-        for p in pats:
-            # print("\n pattern: %s" % p)
-            swapped = pattern_seq(c, p)
-            # print("\n swapped: %s" % swapped)
-            if swapped in s:
-                final.append((c, p, swapped))
-    return final
+    # s = [''.join([str(x) for x in y]) for y in seqs]
+    results = {}
+    for pat in pats:
+        results[''.join(pat)]=[]
+        for seq in seqs:
+            results[''.join(pat)].append(pattern_seq(seq, pat))
+    return results
 
     
     
