@@ -59,22 +59,24 @@ def pattern_seq(seq, pat):
     # ret = ''
     # p = list(pat)
     # s = list(seq)
+    ret = seq[:]
     for i in range(len(pat)):
         if pat[i] == '(':
             # temp[i] = s[i+1]
             # temp[i+1] = s[i]
-            seq[i], seq[i+1] = seq[i+1], seq[i]
-    return seq
+            ret[i], ret[i+1] = ret[i+1], ret[i]
+    return ret
             
     
 def perform_swaps(seqs, pats):
     final = []
     # s = [''.join([str(x) for x in y]) for y in seqs]
     results = {}
-    for pat in pats:
-        results[''.join(pat)]=[]
-        for seq in seqs:
-            results[''.join(pat)].append(pattern_seq(seq, pat))
+    for seq in seqs:
+        str_seq = ''.join([str(x) for x in seq])
+        results[str_seq] = {}
+        for pat in pats:
+            results[str_seq][''.join(pat)] = ''.join([str(x) for x in pattern_seq(seq, pat)])
     return results
 
     
@@ -96,7 +98,19 @@ print("number of alternating sequences %d \n" % len(total_list))
 print("number of swap patterns: %d \n" % len(pats))
 
 performed = perform_swaps(total_list, pats)
+print(performed)
 outfile = 'output_n_%s.csv' % str(says)
-df = pd.DataFrame(performed)
-df.to_csv(outfile)
+
+with open(outfile, 'w') as f:
+    writer = csv.DictWriter(f, fieldnames=[''.join(x) for x in pats])
+    writer.writeheader()
+    for key, val in sorted(performed.items()):
+        row = {'*'*says: key}
+        row.update(val)
+        writer.writerow(row)
+
+# df = pd.DataFrame.from_dict(performed, orient='index')
+# print(df)
+# df = pd.DataFrame(performed)
+# df.to_csv(outfile)
 
