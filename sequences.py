@@ -6,6 +6,7 @@ import pandas as pd
 Script to generate alternating sequences of specified length, and perform switches.
 """
 
+
 def flatten(lis):
     """Given a list, possibly nested to any level, return it flattened."""
     new_lis = []
@@ -22,9 +23,6 @@ def flatten(lis):
 
 def gen_sequence(l, cur_seq, next_gt):
     # Start by getting list of remaining numbers in the sequence.
-    # print(l)
-    # print(cur_seq)
-    # print(next_gt)
     if len(cur_seq)<len(l):
         remaining = [x for x in l if x not in cur_seq]
         true_remain = []
@@ -44,15 +42,12 @@ def gen_sequence(l, cur_seq, next_gt):
 def gen_patterns(n):
     l = '()*'
     combos = list(itertools.product([')', '(','*'], repeat=n))
-    # print(combos)
     bad = ['((','))', '(*', '*)']
     temp = []
     for i in combos:
-        # print(i)
         if not any(b in ''.join(i) for b in bad):
             if i[0] != ')' and i[-1]!='(':
                 temp.append(list(i))
-    # final = [''.join(x) for x in temp]
     return temp
 
 
@@ -67,8 +62,6 @@ def pattern_seq(seq, pat):
     ret = seq[:]
     for i in range(len(pat)):
         if pat[i] == '(':
-            # temp[i] = s[i+1]
-            # temp[i+1] = s[i]
             ret[i], ret[i+1] = ret[i+1], ret[i]
     return ret
 
