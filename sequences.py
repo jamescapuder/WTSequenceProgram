@@ -6,9 +6,14 @@ import pandas as pd
 Script to generate alternating sequences of specified length, and perform switches.
 """
 
+'''
+#################
+#GENERAL UTILITY#
+#################
+'''
 
 def flatten(lis):
-    """Given a list, possibly nested to any level, return it flattened."""
+    '''Given a list, possibly nested to any level, return it flattened.'''
     new_lis = []
     for item in lis:
         try:
@@ -19,6 +24,28 @@ def flatten(lis):
         except TypeError:
             new_lis.append(item)
     return new_lis
+
+
+def find_duplicates(res):
+    '''
+    Finds duplicate patterns by iterating over the result of perform_swaps
+    '''
+    initial_seqs = {}
+    for k,v in res.items():
+        for i, v1 in v.items():        
+            if v1 in initial_seqs.keys():
+                res[k][i] = '[' + v1 + ']'
+                if '[' not in res[initial_seqs[v1][0]][initial_seqs[v1][1]]:
+                    res[initial_seqs[v1][0]][initial_seqs[v1][1]] = '['+v1+']'
+            else:
+                initial_seqs[v1] = (k, i)
+    return res
+
+'''
+#################################
+#SEQUENCE AND PATTERN GENERATION#
+#################################
+'''
 
 
 def gen_sequence(l, cur_seq, next_gt):
@@ -49,6 +76,12 @@ def gen_patterns(n):
             if i[0] != ')' and i[-1]!='(':
                 temp.append(list(i))
     return temp
+
+'''
+################
+#SWAP EXECUTION#
+################
+'''
 
 
 def pattern_seq(seq, pat):
@@ -83,20 +116,7 @@ def perform_swaps(seqs, pats):
     return results
 
 
-def find_duplicates(res):
-    '''
-    Finds duplicate patterns by iterating over the result of perform_swaps
-    '''
-    initial_seqs = {}
-    for k,v in res.items():
-        for i, v1 in v.items():        
-            if v1 in initial_seqs.keys():
-                res[k][i] = '[' + v1 + ']'
-                if '[' not in res[initial_seqs[v1][0]][initial_seqs[v1][1]]:
-                    res[initial_seqs[v1][0]][initial_seqs[v1][1]] = '['+v1+']'
-            else:
-                initial_seqs[v1] = (k, i)
-    return res
+
 
 
 def main():
@@ -106,9 +126,6 @@ def main():
     for i in range(1, says):
         zed = flatten(gen_sequence(list(range(1, says+1)), [i], True))
         results[str(i)] = [x for x in zed if len(x) == says]
-        print("\n Alternating sequences starting with %d \n" % i)    
-        print(results[str(i)])
-        print("\n")
         total_list.extend(results[str(i)])
     pats = gen_patterns(says)
     print("number of alternating sequences %d \n" % len(total_list))
@@ -124,4 +141,6 @@ def main():
             row = {'*'*says: key}
             row.update(val)
             writer.writerow(row)
-main()
+
+if __name__ == '__main__':
+    main()
