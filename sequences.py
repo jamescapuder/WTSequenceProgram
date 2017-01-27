@@ -1,7 +1,7 @@
 import itertools
 from operator import itemgetter
 import csv
-import pandas as pd
+# import pandas as pd
 """
 Script to generate alternating sequences of specified length, and perform switches.
 """
@@ -39,6 +39,7 @@ def find_duplicates(res):
                     res[initial_seqs[v1][0]][initial_seqs[v1][1]] = '['+v1+']'
             else:
                 initial_seqs[v1] = (k, i)
+                continue
     return res
 
 '''
@@ -139,6 +140,7 @@ def main():
         writer.writeheader()
         for key, val in sorted(performed.items()):
             row = {'*'*says: key}
+            print([n for n in val.items() if '[' in n[1]])
             row.update(val)
             writer.writerow(row)
 
